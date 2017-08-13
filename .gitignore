@@ -1,5 +1,5 @@
 .DS_Store
-../node_modules/
+node_modules
 client/dist/
 npm-debug.log
 yarn-error.log
@@ -10,3 +10,6 @@ yarn-error.log
 *.ntvs*
 *.njsproj
 *.sln
+*.iml
+out
+gen

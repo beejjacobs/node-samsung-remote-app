@@ -1,7 +1,7 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml">
   <div id="app">
     <md-tabs md-fixed md-dynamic-height=false>
-      <md-tab v-for="group in groups" v-bind:id="group.id" v-bind:md-label="group.name">
+      <md-tab v-for="group in groups" :key="group.id" v-bind:id="group.id" v-bind:md-label="group.name">
         <md-button v-for="button in group.buttons"
                    :key="button.title"
                    v-on:click="press(button)"
@@ -78,16 +78,11 @@ export default {
   methods: {
     press: function(data) {
       console.log('press ' + data);
-      var url = 'http://192.168.0.110:3000/' + data.method;
+      var url = 'http://192.168.0.2:3000/' + data.method;
       if (data.param) {
         url += '/' + data.param;
       }
-      this.$http.get(url)
-        .then(response => {
-          console.log(response);
-        }, response => {
-          // error callback
-        });
+      this.$http.get(url).then(console.log);
     }
   }
 }

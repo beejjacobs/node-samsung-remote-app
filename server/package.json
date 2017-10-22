@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "express": "^4.15.4",
-    "node-samsung-remote": "^1.0.0"
+    "node-samsung-remote": "^1.0.1"
   },
   "devDependencies": {},
   "scripts": {

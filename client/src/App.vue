@@ -1,6 +1,6 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml">
   <div id="app">
-    <md-tabs md-fixed md-dynamic-height=false>
+    <md-tabs md-fixed :md-dynamic-height='false'>
       <md-tab v-for="group in groups" :key="group.id" v-bind:id="group.id" v-bind:md-label="group.name">
         <md-button v-for="button in group.buttons"
                    :key="button.title"
@@ -32,7 +32,12 @@ export default {
             { title: 'Channel Down', method: 'channelDown' },
             { title: 'Back', method: 'back' },
             { title: 'Exit', method: 'exit' },
-            { title: 'Smart Hub', method: 'smartHub' }
+            { title: 'Smart Hub', method: 'smartHub' },
+            { title: 'play_arrow', method: 'transport', param: 'play' , classes: 'icon'},
+            { title: 'pause', method: 'transport', param: 'pause' , classes: 'icon'},
+            { title: 'stop', method: 'transport', param: 'stop' , classes: 'icon'},
+            { title: 'fast_forward', method: 'transport', param: 'forward' , classes: 'icon'},
+            { title: 'fast_rewind', method: 'transport', param: 'backward', classes: 'icon' }
           ]
         },
         {
@@ -121,5 +126,18 @@ export default {
   }
   .dpad.clear {
     display: block;
+  }
+  .icon {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
   }
 </style>

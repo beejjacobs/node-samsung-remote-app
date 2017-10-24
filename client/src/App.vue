@@ -1,16 +1,50 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml">
   <div id="app">
-    <md-tabs md-fixed :md-dynamic-height='false'>
-      <md-tab v-for="group in groups" :key="group.id" v-bind:id="group.id" v-bind:md-label="group.name">
-        <md-button v-for="button in group.buttons"
-                   :key="button.title"
-                   v-on:click="press(button)"
-                   class="md-raised md-primary"
-                   v-bind:class="[button.classes]">
-          {{ button.title }}
-        </md-button>
-      </md-tab>
-    </md-tabs>
+    <div id="channels">
+      <img v-for="channel in channels"
+            v-bind:src="'img/' + channel.img"
+            v-on:click="press('setChannel', channel.number)">
+    </div>
+    <div id="keypad">
+      <md-button v-for="key in [1,2,3,4,5,6,7,8,9,0]"
+                 :key="key"
+                 class="md-raised md-accent key"
+                 v-on:click="press('number', key)"
+                 v-bind:class="{ middle: key === 0 }">
+        {{ key }}
+      </md-button>
+    </div>
+    <div id="dpad">
+      <md-button class="md-raised md-primary dpad" v-on:click="press('source')">Source</md-button>
+      <md-button class="md-raised md-accent dpad icon" v-on:click="press('arrow', 'up')">arrow_upward</md-button>
+      <md-button class="md-raised md-primary dpad" v-on:click="press('guide')">Guide</md-button>
+      <md-button class="md-raised md-accent dpad icon" v-on:click="press('arrow', 'left')">arrow_back</md-button>
+      <md-button class="md-raised md-accent dpad icon" v-on:click="press('enter')">stop</md-button>
+      <md-button class="md-raised md-accent dpad icon" v-on:click="press('arrow', 'right')">arrow_forward</md-button>
+      <md-button class="md-raised md-primary dpad" v-on:click="press('back')">Back</md-button>
+      <md-button class="md-raised md-accent dpad icon" v-on:click="press('arrow', 'down')">arrow_downward</md-button>
+      <md-button class="md-raised md-primary dpad" v-on:click="press('exit')">Exit</md-button>
+    </div>
+    <div id="transport">
+      <md-button v-for="transport in transports"
+                 :key="transport.icon"
+                 class="md-icon-button md-raised md-accent icon"
+                 v-on:click="press('transport', transport.param)">
+        {{ transport.icon }}
+      </md-button>
+    </div>
+    <md-button class="md-raised md-primary icon" v-on:click="press('volumeUp')">volume_up</md-button>
+    <md-button class="md-raised md-primary icon" v-on:click="press('volumeDown')">volume_down</md-button>
+    <md-button class="md-raised md-primary icon" v-on:click="press('mute')">volume_off</md-button>
+    <md-button class="md-raised md-primary" v-on:click="press('channelUp')">Chn +</md-button>
+    <md-button class="md-raised md-primary" v-on:click="press('channelDown')">Chn -</md-button>
+    <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('hdmi')">settings_input_hdmi</md-button>
+    <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('tv')">tv</md-button>
+    <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('info')">info_outline</md-button>
+    <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('tools')">build</md-button>
+    <md-button class="md-raised md-primary" v-on:click="press('menu')">Menu</md-button>
+
+    <img src="img/SmartTV.svg" class="smarthub" v-on:click="press('smartHub')">
   </div>
 </template>
 
@@ -19,73 +53,29 @@ export default {
   name: 'app',
   data () {
     return {
-      groups: [
-        {
-          id: 'control',
-          name: 'Control',
-          buttons: [
-            { title: 'Source', method: 'source' },
-            { title: 'Vol Up', method: 'volumeUp' },
-            { title: 'Vol Down', method: 'volumeDown' },
-            { title: 'Mute', method: 'mute' },
-            { title: 'Channel Up', method: 'channelUp' },
-            { title: 'Channel Down', method: 'channelDown' },
-            { title: 'Back', method: 'back' },
-            { title: 'Exit', method: 'exit' },
-            { title: 'Smart Hub', method: 'smartHub' },
-            { title: 'play_arrow', method: 'transport', param: 'play' , classes: 'icon'},
-            { title: 'pause', method: 'transport', param: 'pause' , classes: 'icon'},
-            { title: 'stop', method: 'transport', param: 'stop' , classes: 'icon'},
-            { title: 'fast_forward', method: 'transport', param: 'forward' , classes: 'icon'},
-            { title: 'fast_rewind', method: 'transport', param: 'backward', classes: 'icon' }
-          ]
-        },
-        {
-          id: 'channels',
-          name: 'Channels',
-          buttons: [
-            { title: 'BBC One HD', method: 'setChannel', param: '101' },
-            { title: 'BBC Two HD', method: 'setChannel', param: '102' },
-            { title: 'ITV HD', method: 'setChannel', param: '103' },
-            { title: 'Channel 4 HD', method: 'setChannel', param: '104' }
-          ]
-        },
-        {
-          id: 'keypad',
-          name: 'Keypad',
-          buttons: [
-            { title: '1', method: 'number', param: '1', classes: 'key md-accent' },
-            { title: '2', method: 'number', param: '2', classes: 'key md-accent' },
-            { title: '3', method: 'number', param: '3', classes: 'key md-accent' },
-            { title: '4', method: 'number', param: '4', classes: 'key md-accent' },
-            { title: '5', method: 'number', param: '5', classes: 'key md-accent' },
-            { title: '6', method: 'number', param: '6', classes: 'key md-accent' },
-            { title: '7', method: 'number', param: '7', classes: 'key md-accent' },
-            { title: '8', method: 'number', param: '8', classes: 'key md-accent' },
-            { title: '9', method: 'number', param: '9', classes: 'key md-accent' },
-            { title: '0', method: 'number', param: '0', classes: 'key middle md-accent' }
-          ]
-        },
-        {
-          id: 'dpad',
-          name: 'DPad',
-          buttons: [
-            { title: 'arrow_upward', method: 'arrow', param: 'up', classes: 'dpad middle clear' },
-            { title: 'arrow_back', method: 'arrow', param: 'left', classes: 'dpad' },
-            { title: 'stop', method: 'enter', classes: 'dpad' },
-            { title: 'arrow_forward', method: 'arrow', param: 'right', classes: 'dpad' },
-            { title: 'arrow_downward', method: 'arrow', param: 'down', classes: 'dpad middle' }
-          ]
-        }
+      channels: [
+        {img: 'bbconehd.png', number: '101'},
+        {img: 'bbctwohd.png', number: '102'},
+        {img: 'itvhd.png', number: '103'},
+        {img: 'channel4hd.png', number: '104'}
+      ],
+      transports: [
+        { icon: 'skip_previous', param: 'skip-backward'},
+        { icon: 'fast_rewind', param: 'backward'},
+        { icon: 'play_arrow', param: 'play'},
+        { icon: 'pause', param: 'pause'},
+        { icon: 'stop', param: 'stop'},
+        { icon: 'fast_forward', param: 'forward'},
+        { icon: 'skip_next', param: 'skip-forward'}
       ]
     }
   },
   methods: {
-    press: function(data) {
-      console.log('press ' + data);
-      var url = 'http://192.168.0.2:3000/' + data.method;
-      if (data.param) {
-        url += '/' + data.param;
+    press: function(method, param) {
+      console.log('press ' + method + ' ' + param);
+      let url = 'http://192.168.0.2:3000/' + method;
+      if (param) {
+        url += '/' + param;
       }
       this.$http.get(url).then(console.log);
     }
@@ -97,35 +87,21 @@ export default {
 
 <style>
   .key {
-    width: 25%;
+    width: 25vw;
+    height: 25vw;
     font-size: 4em;
-    line-height: 2em;
+    line-height: 25vw;
   }
   .key.middle {
     margin-left: calc(25% + 24px);
   }
   .dpad {
-    width: 25%;
-    line-height: 2em;
+    width: 25vw;
+    height: 25vw;
+  }
+  .dpad.icon {
+    line-height: 25vw;
     font-size: 4em;
-
-    font-family: 'Material Icons';
-    font-weight: normal;
-    font-style: normal;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-feature-settings: 'liga';
-    -webkit-font-smoothing: antialiased;
-  }
-  .dpad.middle {
-    margin-left: calc(25% + 24px);
-  }
-  .dpad.clear {
-    display: block;
   }
   .icon {
     font-family: 'Material Icons';
@@ -139,5 +115,18 @@ export default {
     direction: ltr;
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
+  }
+
+  .smarthub {
+    height: auto;
+    max-width: 80px;
+  }
+
+  #channels img {
+    max-width: 25vw;
+  }
+
+  #transport {
+    text-align: center;
   }
 </style>

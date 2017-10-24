@@ -33,18 +33,20 @@
         {{ transport.icon }}
       </md-button>
     </div>
-    <md-button class="md-raised md-primary icon" v-on:click="press('volumeUp')">volume_up</md-button>
-    <md-button class="md-raised md-primary icon" v-on:click="press('volumeDown')">volume_down</md-button>
-    <md-button class="md-raised md-primary icon" v-on:click="press('mute')">volume_off</md-button>
-    <md-button class="md-raised md-primary" v-on:click="press('channelUp')">Chn +</md-button>
-    <md-button class="md-raised md-primary" v-on:click="press('channelDown')">Chn -</md-button>
-    <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('hdmi')">settings_input_hdmi</md-button>
-    <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('tv')">tv</md-button>
-    <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('info')">info_outline</md-button>
-    <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('tools')">build</md-button>
-    <md-button class="md-raised md-primary" v-on:click="press('menu')">Menu</md-button>
+    <div id="misc">
+      <md-button class="md-raised md-primary icon" v-on:click="press('volumeUp')">volume_up</md-button>
+      <md-button class="md-raised md-primary icon" v-on:click="press('volumeDown')">volume_down</md-button>
+      <md-button class="md-raised md-primary icon" v-on:click="press('mute')">volume_off</md-button>
+      <md-button class="md-raised md-primary" v-on:click="press('channelUp')">Chn +</md-button>
+      <md-button class="md-raised md-primary" v-on:click="press('channelDown')">Chn -</md-button>
+      <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('hdmi')">settings_input_hdmi</md-button>
+      <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('tv')">tv</md-button>
+      <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('info')">info_outline</md-button>
+      <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('tools')">build</md-button>
+      <md-button class="md-raised md-primary" v-on:click="press('menu')">Menu</md-button>
 
-    <img src="img/SmartTV.svg" class="smarthub" v-on:click="press('smartHub')">
+      <img src="img/SmartTV.svg" class="smarthub" v-on:click="press('smartHub')">
+    </div>
   </div>
 </template>
 
@@ -86,22 +88,64 @@ export default {
 </script>
 
 <style>
+  .md-button {
+    min-width: unset;
+    min-height: unset;
+  }
+  #app {
+    display: grid;
+    grid-template-columns: repeat(6, 16.6vw);
+    grid-template-rows: repeat(10, 10vh);
+    width: 100vw;
+    height: 100vh;
+  }
+
+  #channels,
+  #transport,
+  #misc {
+    grid-column: span 6;
+  }
+
+  #keypad,
+  #dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 16.6vw);
+    grid-row: 2 / 5;
+  }
+
+  #channels {
+    grid-row: 1;
+  }
+
+  #keypad {
+    grid-column: 1 / 4;
+  }
+
+  #dpad {
+    grid-column: 4 / 7;
+  }
+
+  #transport {
+    grid-row: 6;
+  }
+
+  #misc {
+    grid-row: 7 / 10;
+  }
+
   .key {
-    width: 25vw;
-    height: 25vw;
-    font-size: 4em;
-    line-height: 25vw;
+    width: 90%;
   }
   .key.middle {
-    margin-left: calc(25% + 24px);
+    grid-column: 2;
   }
   .dpad {
-    width: 25vw;
-    height: 25vw;
+    width: 90%;
+    /*height: 25vw;*/
   }
   .dpad.icon {
-    line-height: 25vw;
-    font-size: 4em;
+    /*line-height: 25vw;*/
+    font-size: 2em;
   }
   .icon {
     font-family: 'Material Icons';
@@ -122,11 +166,22 @@ export default {
     max-width: 80px;
   }
 
+  #channels {
+    max-height: 60px;
+  }
   #channels img {
-    max-width: 25vw;
+    max-width: 24vw;
   }
 
-  #transport {
+  .md-button.md-icon-button {
+    width: 55px;
+    height: 55px;
+    margin: 0 6px;
+    font-size: 2em;
+  }
+
+  #transport,
+  #channels {
     text-align: center;
   }
 </style>

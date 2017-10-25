@@ -44,7 +44,7 @@
       <md-button id="info" :class="iconButton" @click="press('info')">info_outline</md-button>
       <md-button id="tools" :class="iconButton" @click="press('tools')">build</md-button>
       <md-button id="menu" :class="iconButton" @click="press('menu')">menu</md-button>
-      <img id="smartHub" src="img/SmartTV.svg" @click="press('smartHub')">
+      <img id="smartHub" src="img/smarthub.png" @click="press('smartHub')">
     </div>
   </div>
 </template>
@@ -108,6 +108,7 @@ export default {
     grid-template-rows: repeat(10, 10vh);
     width: 100vw;
     height: 100vh;
+    background-color: black;
   }
 
   #channels,
@@ -127,6 +128,8 @@ export default {
   }
   #channels img {
     max-width: 24vw;
+    outline: 2px solid black;
+    outline-offset: -2px;
   }
   #transport,
   #channels {
@@ -180,8 +183,7 @@ export default {
     grid-area: 3 / 2;
   }
   #smartHub {
-    height: auto;
-    max-width: 80px;
+    max-width: 60px;
     grid-area: 2 / 3;
   }
   #channelUp {

@@ -15,7 +15,7 @@
       </md-button>
     </div>
     <div id="dpad">
-      <md-button class="md-raised md-primary dpad" v-on:click="press('source')">Source</md-button>
+      <md-button class="md-raised md-primary dpad" v-on:click="press('source')">Src</md-button>
       <md-button class="md-raised md-accent dpad icon" v-on:click="press('arrow', 'up')">arrow_upward</md-button>
       <md-button class="md-raised md-primary dpad" v-on:click="press('guide')">Guide</md-button>
       <md-button class="md-raised md-accent dpad icon" v-on:click="press('arrow', 'left')">arrow_back</md-button>
@@ -34,18 +34,17 @@
       </md-button>
     </div>
     <div id="misc">
-      <md-button class="md-raised md-primary icon" v-on:click="press('volumeUp')">volume_up</md-button>
-      <md-button class="md-raised md-primary icon" v-on:click="press('volumeDown')">volume_down</md-button>
-      <md-button class="md-raised md-primary icon" v-on:click="press('mute')">volume_off</md-button>
-      <md-button class="md-raised md-primary" v-on:click="press('channelUp')">Chn +</md-button>
-      <md-button class="md-raised md-primary" v-on:click="press('channelDown')">Chn -</md-button>
-      <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('hdmi')">settings_input_hdmi</md-button>
-      <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('tv')">tv</md-button>
-      <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('info')">info_outline</md-button>
-      <md-button class="md-icon-button md-raised md-primary icon" v-on:click="press('tools')">build</md-button>
-      <md-button class="md-raised md-primary" v-on:click="press('menu')">Menu</md-button>
-
-      <img src="img/SmartTV.svg" class="smarthub" v-on:click="press('smartHub')">
+      <md-button id="volumeUp" class="md-icon-button md-raised md-primary icon" v-on:click="press('volumeUp')">volume_up</md-button>
+      <md-button id="volumeDown" class="md-icon-button md-raised md-primary icon" v-on:click="press('volumeDown')">volume_down</md-button>
+      <md-button id="mute" class="md-icon-button md-raised md-primary icon" v-on:click="press('mute')">volume_off</md-button>
+      <md-button id="channelUp" class="md-raised md-primary" v-on:click="press('channelUp')">Chn +</md-button>
+      <md-button id="channelDown" class="md-raised md-primary" v-on:click="press('channelDown')">Chn -</md-button>
+      <md-button id="hdmi" class="md-icon-button md-raised md-primary icon" v-on:click="press('hdmi')">settings_input_hdmi</md-button>
+      <md-button id="tv" class="md-icon-button md-raised md-primary icon" v-on:click="press('tv')">tv</md-button>
+      <md-button id="info" class="md-icon-button md-raised md-primary icon" v-on:click="press('info')">info_outline</md-button>
+      <md-button id="tools" class="md-icon-button md-raised md-primary icon" v-on:click="press('tools')">build</md-button>
+      <md-button id="menu" class="md-raised md-primary" v-on:click="press('menu')">Menu</md-button>
+      <img id="smarthub" src="img/SmartTV.svg" v-on:click="press('smartHub')">
     </div>
   </div>
 </template>
@@ -91,7 +90,15 @@ export default {
   .md-button {
     min-width: unset;
     min-height: unset;
+    padding: 0;
   }
+  .md-button.md-icon-button {
+    width: 55px;
+    height: 55px;
+    margin: 0 6px;
+    font-size: 2em;
+  }
+
   #app {
     display: grid;
     grid-template-columns: repeat(6, 16.6vw);
@@ -109,42 +116,94 @@ export default {
   #keypad,
   #dpad {
     display: grid;
-    grid-template-columns: repeat(3, 16.6vw);
-    grid-row: 2 / 5;
+    grid-template-columns: repeat(3, 16vw);
   }
 
   #channels {
     grid-row: 1;
   }
+  #channels img {
+    max-width: 24vw;
+  }
+  #transport,
+  #channels {
+    text-align: center;
+  }
+  #transport {
+    grid-row: 10;
+  }
 
   #keypad {
     grid-column: 1 / 4;
+    grid-row: 6 / 10;
   }
 
   #dpad {
     grid-column: 4 / 7;
-  }
-
-  #transport {
-    grid-row: 6;
+    grid-row: 6 / 9;
   }
 
   #misc {
-    grid-row: 7 / 10;
+    display: grid;
+    grid-row: 2 / 5;
+    grid-template-columns: repeat(5, 20vw);
+    grid-template-rows: repeat(3, 20vw);
+  }
+  #volumeUp {
+    grid-area: 1 / 1;
+  }
+  #volumeDown {
+    grid-area: 2 / 1;
+  }
+  #mute {
+    grid-area: 3 / 1;
+  }
+  #tv {
+    grid-area: 1 / 2;
+  }
+  #hdmi {
+    grid-area: 1 / 4;
+  }
+  #info {
+    grid-area: 3 / 4;
+  }
+  #tools {
+    grid-area: 3 / 2;
+  }
+  #smarthub {
+    height: auto;
+    max-width: 80px;
+    grid-area: 2 / 3;
+  }
+  #channelUp {
+    grid-area: 1 / 5;
+  }
+  #channelDown {
+    grid-area: 2 / 5;
+  }
+  #menu {
+    grid-area: 3 / 5;
+  }
+
+  #channelUp,
+  #channelDown,
+  #menu {
+    width: 55px;
+    height: 55px;
+    margin: 0 6px;
   }
 
   .key {
     width: 90%;
+    font-size: 2em;
   }
   .key.middle {
     grid-column: 2;
   }
   .dpad {
     width: 90%;
-    /*height: 25vw;*/
   }
   .dpad.icon {
-    /*line-height: 25vw;*/
     font-size: 2em;
   }
   .icon {
@@ -159,29 +218,5 @@ export default {
     direction: ltr;
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
-  }
-
-  .smarthub {
-    height: auto;
-    max-width: 80px;
-  }
-
-  #channels {
-    max-height: 60px;
-  }
-  #channels img {
-    max-width: 24vw;
-  }
-
-  .md-button.md-icon-button {
-    width: 55px;
-    height: 55px;
-    margin: 0 6px;
-    font-size: 2em;
-  }
-
-  #transport,
-  #channels {
-    text-align: center;
   }
 </style>

@@ -78,7 +78,7 @@ export default {
     press: function(method, param) {
       console.log('press ' + method + ' ' + (param ? param : ''));
       let url = 'http://192.168.0.2:3000/' + method;
-      if (param) {
+      if (typeof param !== 'undefined') {
         url += '/' + param;
       }
       this.$http.get(url).then(console.log);

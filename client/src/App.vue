@@ -140,6 +140,12 @@ export default {
     grid-row: 10;
   }
 
+  @media (max-width: 480px) {
+    #transport .md-button.md-icon-button {
+      margin: 0;
+    }
+  }
+
   #keypad {
     grid-column: 1 / 4;
     grid-row: 6 / 10;

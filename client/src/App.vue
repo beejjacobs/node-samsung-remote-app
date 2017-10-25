@@ -3,48 +3,48 @@
     <div id="channels">
       <img v-for="channel in channels"
             v-bind:src="'img/' + channel.img"
-            v-on:click="press('setChannel', channel.number)">
+            @click="press('setChannel', channel.number)">
     </div>
-    <div id="keypad">
+    <md-theme md-name="blueGrey" id="keypad">
       <md-button v-for="key in [1,2,3,4,5,6,7,8,9,0]"
                  :key="key"
-                 class="md-raised md-accent key"
-                 v-on:click="press('number', key)"
+                 class="md-raised md-primary key"
+                 @click="press('number', key)"
                  v-bind:class="{ middle: key === 0 }">
         {{ key }}
       </md-button>
-    </div>
+    </md-theme>
     <div id="dpad">
-      <md-button class="md-raised md-primary dpad" v-on:click="press('source')">Src</md-button>
-      <md-button class="md-raised md-accent dpad icon" v-on:click="press('arrow', 'up')">arrow_upward</md-button>
-      <md-button class="md-raised md-primary dpad" v-on:click="press('guide')">Guide</md-button>
-      <md-button class="md-raised md-accent dpad icon" v-on:click="press('arrow', 'left')">arrow_back</md-button>
-      <md-button class="md-raised md-accent dpad icon" v-on:click="press('enter')">stop</md-button>
-      <md-button class="md-raised md-accent dpad icon" v-on:click="press('arrow', 'right')">arrow_forward</md-button>
-      <md-button class="md-raised md-primary dpad" v-on:click="press('back')">Back</md-button>
-      <md-button class="md-raised md-accent dpad icon" v-on:click="press('arrow', 'down')">arrow_downward</md-button>
-      <md-button class="md-raised md-primary dpad" v-on:click="press('exit')">Exit</md-button>
+      <md-button :class="dpadButton" @click="press('source')">Src</md-button>
+      <md-button :class="dpadIcon" @click="press('arrow', 'up')">arrow_upward</md-button>
+      <md-button :class="dpadButton" @click="press('guide')">Guide</md-button>
+      <md-button :class="dpadIcon" @click="press('arrow', 'left')">arrow_back</md-button>
+      <md-button :class="dpadIcon" @click="press('enter')">stop</md-button>
+      <md-button :class="dpadIcon" @click="press('arrow', 'right')">arrow_forward</md-button>
+      <md-button :class="dpadButton" @click="press('back')">Back</md-button>
+      <md-button :class="dpadIcon" @click="press('arrow', 'down')">arrow_downward</md-button>
+      <md-button :class="dpadButton" @click="press('exit')">Exit</md-button>
     </div>
-    <div id="transport">
+    <md-theme md-name="deepPurple" id="transport">
       <md-button v-for="transport in transports"
                  :key="transport.icon"
-                 class="md-icon-button md-raised md-accent icon"
-                 v-on:click="press('transport', transport.param)">
+                 :class="iconButton"
+                 @click="press('transport', transport.param)">
         {{ transport.icon }}
       </md-button>
-    </div>
+    </md-theme>
     <div id="misc">
-      <md-button id="volumeUp" class="md-icon-button md-raised md-primary icon" v-on:click="press('volumeUp')">volume_up</md-button>
-      <md-button id="volumeDown" class="md-icon-button md-raised md-primary icon" v-on:click="press('volumeDown')">volume_down</md-button>
-      <md-button id="mute" class="md-icon-button md-raised md-primary icon" v-on:click="press('mute')">volume_off</md-button>
-      <md-button id="channelUp" class="md-raised md-primary" v-on:click="press('channelUp')">Chn +</md-button>
-      <md-button id="channelDown" class="md-raised md-primary" v-on:click="press('channelDown')">Chn -</md-button>
-      <md-button id="hdmi" class="md-icon-button md-raised md-primary icon" v-on:click="press('hdmi')">settings_input_hdmi</md-button>
-      <md-button id="tv" class="md-icon-button md-raised md-primary icon" v-on:click="press('tv')">tv</md-button>
-      <md-button id="info" class="md-icon-button md-raised md-primary icon" v-on:click="press('info')">info_outline</md-button>
-      <md-button id="tools" class="md-icon-button md-raised md-primary icon" v-on:click="press('tools')">build</md-button>
-      <md-button id="menu" class="md-raised md-primary" v-on:click="press('menu')">Menu</md-button>
-      <img id="smarthub" src="img/SmartTV.svg" v-on:click="press('smartHub')">
+      <md-button id="volumeUp" :class="iconButton" @click="press('volumeUp')">volume_up</md-button>
+      <md-button id="volumeDown" :class="iconButton" @click="press('volumeDown')">volume_down</md-button>
+      <md-button id="mute" :class="iconButton" @click="press('mute')">volume_off</md-button>
+      <md-button id="channelUp" :class="iconButton" @click="press('channelUp')">add</md-button>
+      <md-button id="channelDown" :class="iconButton" @click="press('channelDown')">remove</md-button>
+      <md-button id="hdmi" :class="iconButton" @click="press('hdmi')">settings_input_hdmi</md-button>
+      <md-button id="tv" :class="iconButton" @click="press('tv')">tv</md-button>
+      <md-button id="info" :class="iconButton" @click="press('info')">info_outline</md-button>
+      <md-button id="tools" :class="iconButton" @click="press('tools')">build</md-button>
+      <md-button id="menu" :class="iconButton" @click="press('menu')">menu</md-button>
+      <img id="smartHub" src="img/SmartTV.svg" @click="press('smartHub')">
     </div>
   </div>
 </template>
@@ -54,6 +54,9 @@ export default {
   name: 'app',
   data () {
     return {
+      iconButton: 'md-icon-button md-raised md-primary icon',
+      dpadIcon: 'md-raised md-accent dpad icon',
+      dpadButton: 'md-raised md-primary dpad',
       channels: [
         {img: 'bbconehd.png', number: '101'},
         {img: 'bbctwohd.png', number: '102'},
@@ -73,7 +76,7 @@ export default {
   },
   methods: {
     press: function(method, param) {
-      console.log('press ' + method + ' ' + param);
+      console.log('press ' + method + ' ' + (param ? param : ''));
       let url = 'http://192.168.0.2:3000/' + method;
       if (param) {
         url += '/' + param;
@@ -127,7 +130,8 @@ export default {
   }
   #transport,
   #channels {
-    text-align: center;
+    justify-self: center;
+    align-self: center;
   }
   #transport {
     grid-row: 10;
@@ -145,9 +149,14 @@ export default {
 
   #misc {
     display: grid;
-    grid-row: 2 / 5;
-    grid-template-columns: repeat(5, 20vw);
-    grid-template-rows: repeat(3, 20vw);
+    grid-row: 2 / 6;
+    grid-template-columns: repeat(5, 18vw);
+    grid-template-rows: repeat(3, 10vh);
+    width: 90vw;
+    align-self: center;
+    justify-self: center;
+    align-items: center;
+    justify-items: center;
   }
   #volumeUp {
     grid-area: 1 / 1;
@@ -170,7 +179,7 @@ export default {
   #tools {
     grid-area: 3 / 2;
   }
-  #smarthub {
+  #smartHub {
     height: auto;
     max-width: 80px;
     grid-area: 2 / 3;
@@ -183,14 +192,6 @@ export default {
   }
   #menu {
     grid-area: 3 / 5;
-  }
-
-  #channelUp,
-  #channelDown,
-  #menu {
-    width: 55px;
-    height: 55px;
-    margin: 0 6px;
   }
 
   .key {

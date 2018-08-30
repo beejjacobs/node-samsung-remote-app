@@ -1,59 +1,76 @@
 <template xmlns:v-on="http://www.w3.org/1999/xhtml">
-  <div id="app">
-    <div id="channels">
-      <img v-for="channel in channels"
-            v-bind:src="'img/' + channel.img"
-            @click="press('setChannel', channel.number)">
+  <div id="app" ref="touch">
+    <div class="controls" v-if="!swipeView">
+      <div id="channels">
+        <img v-for="channel in channels"
+             v-bind:src="'img/' + channel.img"
+             @click="press('setChannel', channel.number)">
+      </div>
+      <md-theme md-name="blueGrey" id="keypad">
+        <md-button v-for="key in [1,2,3,4,5,6,7,8,9,0]"
+                   :key="key"
+                   class="md-raised md-primary key"
+                   @click="press('number', key)"
+                   v-bind:class="{ middle: key === 0 }">
+          {{ key }}
+        </md-button>
+      </md-theme>
+      <div id="dpad">
+        <md-button :class="dpadButton" @click="press('source')">Src</md-button>
+        <md-button :class="dpadIcon" @click="press('arrow', 'up')">arrow_upward</md-button>
+        <md-button :class="dpadButton" @click="press('guide')">Guide</md-button>
+        <md-button :class="dpadIcon" @click="press('arrow', 'left')">arrow_back</md-button>
+        <md-button :class="dpadIcon" @click="press('enter')">stop</md-button>
+        <md-button :class="dpadIcon" @click="press('arrow', 'right')">arrow_forward</md-button>
+        <md-button :class="dpadButton" @click="press('back')">Back</md-button>
+        <md-button :class="dpadIcon" @click="press('arrow', 'down')">arrow_downward</md-button>
+        <md-button :class="dpadButton" @click="press('exit')">Exit</md-button>
+        <md-button class="middle key" :class="dpadIcon" @click="swipeView = true">touch_app</md-button>
+      </div>
+      <md-theme md-name="deepPurple" id="transport">
+        <md-button v-for="transport in transports"
+                   :key="transport.icon"
+                   :class="iconButton"
+                   @click="press('transport', transport.param)">
+          {{ transport.icon }}
+        </md-button>
+      </md-theme>
+      <div id="misc">
+        <md-button id="volumeUp" :class="iconButton" @click="press('volumeUp')">volume_up</md-button>
+        <md-button id="volumeDown" :class="iconButton" @click="press('volumeDown')">volume_down</md-button>
+        <md-button id="mute" :class="iconButton" @click="press('mute')">volume_off</md-button>
+        <md-button id="channelUp" :class="iconButton" @click="press('channelUp')">add</md-button>
+        <md-button id="channelDown" :class="iconButton" @click="press('channelDown')">remove</md-button>
+        <md-button id="hdmi" :class="iconButton" @click="press('hdmi')">settings_input_hdmi</md-button>
+        <md-button id="tv" :class="iconButton" @click="press('tv')">tv</md-button>
+        <md-button id="info" :class="iconButton" @click="press('info')">info_outline</md-button>
+        <md-button id="tools" :class="iconButton" @click="press('tools')">build</md-button>
+        <md-button id="menu" :class="iconButton" @click="press('menu')">menu</md-button>
+        <img id="smartHub" src="img/smarthub.png" @click="press('smartHub')">
+      </div>
     </div>
-    <md-theme md-name="blueGrey" id="keypad">
-      <md-button v-for="key in [1,2,3,4,5,6,7,8,9,0]"
-                 :key="key"
-                 class="md-raised md-primary key"
-                 @click="press('number', key)"
-                 v-bind:class="{ middle: key === 0 }">
-        {{ key }}
+    <div v-else>
+      <md-button class="md-fab md-fab-top-right" @click="swipeView = false">
+        <md-icon>close</md-icon>
       </md-button>
-    </md-theme>
-    <div id="dpad">
-      <md-button :class="dpadButton" @click="press('source')">Src</md-button>
-      <md-button :class="dpadIcon" @click="press('arrow', 'up')">arrow_upward</md-button>
-      <md-button :class="dpadButton" @click="press('guide')">Guide</md-button>
-      <md-button :class="dpadIcon" @click="press('arrow', 'left')">arrow_back</md-button>
-      <md-button :class="dpadIcon" @click="press('enter')">stop</md-button>
-      <md-button :class="dpadIcon" @click="press('arrow', 'right')">arrow_forward</md-button>
-      <md-button :class="dpadButton" @click="press('back')">Back</md-button>
-      <md-button :class="dpadIcon" @click="press('arrow', 'down')">arrow_downward</md-button>
-      <md-button :class="dpadButton" @click="press('exit')">Exit</md-button>
-    </div>
-    <md-theme md-name="deepPurple" id="transport">
-      <md-button v-for="transport in transports"
-                 :key="transport.icon"
-                 :class="iconButton"
-                 @click="press('transport', transport.param)">
-        {{ transport.icon }}
-      </md-button>
-    </md-theme>
-    <div id="misc">
-      <md-button id="volumeUp" :class="iconButton" @click="press('volumeUp')">volume_up</md-button>
-      <md-button id="volumeDown" :class="iconButton" @click="press('volumeDown')">volume_down</md-button>
-      <md-button id="mute" :class="iconButton" @click="press('mute')">volume_off</md-button>
-      <md-button id="channelUp" :class="iconButton" @click="press('channelUp')">add</md-button>
-      <md-button id="channelDown" :class="iconButton" @click="press('channelDown')">remove</md-button>
-      <md-button id="hdmi" :class="iconButton" @click="press('hdmi')">settings_input_hdmi</md-button>
-      <md-button id="tv" :class="iconButton" @click="press('tv')">tv</md-button>
-      <md-button id="info" :class="iconButton" @click="press('info')">info_outline</md-button>
-      <md-button id="tools" :class="iconButton" @click="press('tools')">build</md-button>
-      <md-button id="menu" :class="iconButton" @click="press('menu')">menu</md-button>
-      <img id="smartHub" src="img/smarthub.png" @click="press('smartHub')">
+      <md-icon class="touch-icon white md-size-4x">touch_app</md-icon>
+      <md-icon v-if="swiping === 'up'" class="md-size-2x swipe up">arrow_upward</md-icon>
+      <md-icon v-if="swiping === 'down'" class="md-size-2x swipe down">arrow_downward</md-icon>
+      <md-icon v-if="swiping === 'left'" class="md-size-2x swipe left">arrow_back</md-icon>
+      <md-icon v-if="swiping === 'right'" class="md-size-2x swipe right">arrow_forward</md-icon>
     </div>
   </div>
 </template>
 
 <script>
+  import Hammer from './hammer';
+
 export default {
   name: 'app',
   data () {
     return {
+      swipeView: false,
+      swiping: false,
       iconButton: 'md-icon-button md-raised md-primary icon',
       dpadIcon: 'md-raised md-accent dpad icon',
       dpadButton: 'md-raised md-primary dpad',
@@ -73,6 +90,44 @@ export default {
         { icon: 'skip_next', param: 'skip-forward'}
       ]
     }
+  },
+  mounted() {
+    let h = new Hammer(this.$refs.touch);
+
+    h.get('swipe').set({ direction: Hammer.DIRECTION_ALL });
+
+    h.on('swipeleft swiperight swipeup swipedown tap press', ev => {
+      if (!this.swipeView) {
+        return;
+      }
+      switch (ev.type) {
+        case 'swipeleft':
+          this.swiping = 'left';
+          this.press('arrow', 'left');
+          break;
+        case 'swiperight':
+          this.swiping = 'right';
+          this.press('arrow', 'right');
+          break;
+        case 'swipeup':
+          this.swiping = 'up';
+          this.press('arrow', 'up');
+          break;
+        case 'swipedown':
+          this.swiping = 'down';
+          this.press('arrow', 'down');
+          break;
+        case 'tap':
+        case 'press':
+          this.press('enter');
+          break;
+      }
+      if (this.swiping) {
+        setTimeout(() => {
+          this.swiping = false;
+        }, 500);
+      }
+    });
   },
   methods: {
     press: function(method, param) {
@@ -103,12 +158,49 @@ export default {
   }
 
   #app {
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+  }
+
+  .controls {
     display: grid;
     grid-template-columns: repeat(6, 16.6vw);
     grid-template-rows: repeat(10, 10vh);
     width: 100vw;
     height: 100vh;
-    background-color: black;
+  }
+
+  .white {
+    color: white;
+  }
+
+  .touch-icon {
+    position: absolute;
+    top: calc(50% - 48px);
+    left: calc(50% - 48px);
+  }
+
+  .swipe {
+    position: absolute;
+    color: #cecece;
+  }
+
+  .swipe.up {
+    top: 24px;
+    left: calc(50% - 24px);
+  }
+  .swipe.down {
+    bottom: 24px;
+    left: calc(50% - 24px);
+  }
+  .swipe.left {
+    top: calc(50% - 24px);
+    left: 24px;
+  }
+  .swipe.right {
+    top: calc(50% - 24px);
+    right: 24px;
   }
 
   #channels,
@@ -153,7 +245,7 @@ export default {
 
   #dpad {
     grid-column: 4 / 7;
-    grid-row: 6 / 9;
+    grid-row: 6 / 10;
   }
 
   #misc {

@@ -50,8 +50,8 @@
       </div>
     </div>
     <div v-else>
-      <md-button class="md-fab md-fab-top-right" @click="swipeView = false">
-        <md-icon>close</md-icon>
+      <md-button class="md-fab md-fab-top-right" @click="swipeView = false" id="close">
+        <md-icon id="close-icon">close</md-icon>
       </md-button>
       <md-icon class="touch-icon white md-size-4x">touch_app</md-icon>
       <md-icon v-if="swiping === 'up'" class="md-size-2x swipe up">arrow_upward</md-icon>
@@ -119,7 +119,9 @@ export default {
           break;
         case 'tap':
         case 'press':
-          this.press('enter');
+          if (ev.target.id !== 'close' && ev.target.id !== 'close-icon') {
+            this.press('enter');
+          }
           break;
       }
       if (this.swiping) {

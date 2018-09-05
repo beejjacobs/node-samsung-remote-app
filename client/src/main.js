@@ -3,6 +3,7 @@ import App from './App.vue'
 import VueResource from 'vue-resource';
 import VueMaterial from 'vue-material';
 import 'vue-material/dist/vue-material.css';
+// import './ripple';
 
 Vue.use(VueResource);
 Vue.use(VueMaterial);

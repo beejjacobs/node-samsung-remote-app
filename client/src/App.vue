@@ -50,6 +50,9 @@
       </div>
     </div>
     <div v-else>
+      <div class="ripple">
+        <md-ink-ripple/>
+      </div>
       <md-button class="md-fab md-fab-top-right" @click="swipeView = false" id="close">
         <md-icon id="close-icon">close</md-icon>
       </md-button>
@@ -147,6 +150,24 @@ export default {
 </script>
 
 <style>
+  .ripple {
+    color: white;
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .md-ripple.md-active.md-fadeout {
+    transition: all 2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition-duration: 2s;
+  }
+  .md-ripple.md-active {
+    animation: ripple 4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  }
+  .md-ripple {
+    opacity: .15;
+  }
+
   .md-button {
     min-width: unset;
     min-height: unset;

@@ -2,6 +2,7 @@ const express = require('express');
 const samsung = require('node-samsung-remote');
 const config = require('./config.json');
 const { Sonos } = require('sonos');
+const io = require('socket.io')(3001);
 const app = express();
 
 let remote = new samsung({ip: config.tv});
@@ -11,9 +12,25 @@ let soundBar = new Sonos(config.sonos);
 
 soundBar.on('Volume', volume => {
   console.log('volume change', volume);
+  io.emit('volume', volume);
 });
 soundBar.on('Muted', muted => {
   console.log('mute change', muted)
+  io.emit('mute', muted);
+});
+
+io.on('connection', function (socket) {
+  console.log('client connected');
+  soundBar.getMuted()
+      .then(muted => socket.emit('mute', muted));
+  soundBar.getVolume()
+      .then(volume => socket.emit('volume', volume));
+  socket.on('changeVolume', volume => {
+    console.log('changeVolume', volume);
+    if (volume >= 0 && volume <= 100) {
+      soundBar.setVolume(volume)
+    }
+  });
 });
 
 app.all('/*', function(req, res, next) {

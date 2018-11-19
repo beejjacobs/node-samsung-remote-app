@@ -6,6 +6,7 @@
   "dependencies": {
     "express": "^4.15.4",
     "node-samsung-remote": "^1.0.1",
+    "socket.io": "^2.1.1",
     "sonos": "^1.6.0"
   },
   "devDependencies": {},

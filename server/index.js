@@ -2,7 +2,7 @@ const express = require('express');
 const samsung = require('node-samsung-remote');
 const config = require('./config.json');
 const { Sonos } = require('sonos');
-const io = require('socket.io')(3001);
+const io = require('socket.io')(3003);
 const app = express();
 
 let remote = new samsung({ip: config.tv});

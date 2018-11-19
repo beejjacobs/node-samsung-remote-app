@@ -73,7 +73,7 @@
   import Hammer from './hammer';
   import io from 'socket.io-client';
   const host = process.env.NODE_ENV === 'production' ? '192.168.0.2' : 'localhost';
-  const socket = io.connect(`http://${host}:3001`);
+  const socket = io.connect(`http://${host}:3003`);
 
 export default {
   name: 'app',

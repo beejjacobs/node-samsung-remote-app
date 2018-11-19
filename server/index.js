@@ -1,10 +1,20 @@
 const express = require('express');
 const samsung = require('node-samsung-remote');
 const config = require('./config.json');
+const { Sonos } = require('sonos');
 const app = express();
 
 let remote = new samsung({ip: config.tv});
 remote.debug = true;
+
+let soundBar = new Sonos(config.sonos);
+
+soundBar.on('Volume', volume => {
+  console.log('volume change', volume);
+});
+soundBar.on('Muted', muted => {
+  console.log('mute change', muted)
+});
 
 app.all('/*', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -37,20 +47,41 @@ app.get('/number/:number', function (req, res) {
 
 app.get('/volumeUp', function (req, res) {
   console.log('volumeUp');
-  remote.volumeUp();
-  res.sendStatus(200);
+  soundBar.getVolume()
+      .then(volume => {
+        let newVolume = volume + 4;
+        if (newVolume > 100) {
+          newVolume = 100;
+        }
+        return soundBar.setVolume(newVolume);
+      })
+      .then(() => {
+        res.sendStatus(200);
+      });
 });
 
 app.get('/volumeDown', function (req, res) {
   console.log('volumeDown');
-  remote.volumeDown();
-  res.sendStatus(200);
+  soundBar.getVolume()
+      .then(volume => {
+        let newVolume = volume - 4;
+        if (newVolume < 0) {
+          newVolume = 0;
+        }
+        return soundBar.setVolume(newVolume);
+      })
+      .then(() => {
+        res.sendStatus(200);
+      });
 });
 
 app.get('/mute', function (req, res) {
   console.log('mute');
-  remote.mute();
-  res.sendStatus(200);
+  soundBar.getMuted()
+      .then(muted => soundBar.setMuted(!muted))
+      .then(() => {
+        res.sendStatus(200);
+      });
 });
 
 app.get('/channelUp', function (req, res) {

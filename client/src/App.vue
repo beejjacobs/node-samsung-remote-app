@@ -38,7 +38,7 @@
       <div id="misc">
         <md-button id="volumeUp" :class="iconButton" @click="press('volumeUp')">volume_up</md-button>
         <md-button id="volumeDown" :class="iconButton" @click="press('volumeDown')">volume_down</md-button>
-        <md-button id="mute" :class="iconButton" @click="press('mute')">volume_off</md-button>
+        <md-button id="mute" :class="muteButtonClass" @click="press('mute')">volume_off</md-button>
         <md-button id="channelUp" :class="iconButton" @click="press('channelUp')">add</md-button>
         <md-button id="channelDown" :class="iconButton" @click="press('channelDown')">remove</md-button>
         <md-button id="hdmi" :class="iconButton" @click="press('hdmi')">settings_input_hdmi</md-button>
@@ -47,6 +47,9 @@
         <md-button id="tools" :class="iconButton" @click="press('tools')">build</md-button>
         <md-button id="menu" :class="iconButton" @click="press('menu')">menu</md-button>
         <img id="smartHub" src="img/smarthub.png" @click="press('smartHub')">
+        <div id="slider" >
+          <vue-slider :value="volume" @input="volumeChange" tooltip="hover" :process-style="sliderStyle" :bg-style="sliderBackground" lazy/>
+        </div>
       </div>
     </div>
     <div v-else>
@@ -66,10 +69,17 @@
 </template>
 
 <script>
+  import VueSlider from 'vue-slider-component'
   import Hammer from './hammer';
+  import io from 'socket.io-client';
+  const host = process.env.NODE_ENV === 'production' ? '192.168.0.2' : 'localhost';
+  const socket = io.connect(`http://${host}:3001`);
 
 export default {
   name: 'app',
+  components: {
+    VueSlider
+  },
   data () {
     return {
       swipeView: false,
@@ -91,7 +101,24 @@ export default {
         { icon: 'stop', param: 'stop'},
         { icon: 'fast_forward', param: 'forward'},
         { icon: 'skip_next', param: 'skip-forward'}
-      ]
+      ],
+      volume: 50,
+      muted: false
+    }
+  },
+  computed: {
+    muteButtonClass() {
+      return this.muted ? this.iconButton + ' red' : this.iconButton;
+    },
+    sliderStyle() {
+      return {
+        "backgroundColor": "#fff"
+      };
+    },
+    sliderBackground() {
+      return {
+        "backgroundColor": "#808080"
+      };
     }
   },
   mounted() {
@@ -134,14 +161,26 @@ export default {
       }
     });
   },
+  created() {
+    socket.on('volume', volume => {
+      this.volume = volume;
+    });
+    socket.on('mute', muted => {
+      this.muted = muted;
+    });
+  },
   methods: {
     press: function(method, param) {
       console.log('press ' + method + ' ' + (param ? param : ''));
-      let url = 'http://192.168.0.2:3000/' + method;
+      let url = `http://${host}:3000/${method}`;
       if (typeof param !== 'undefined') {
         url += '/' + param;
       }
       this.$http.get(url).then(console.log);
+    },
+    volumeChange(volume) {
+      console.log(volume);
+      socket.emit('changeVolume', volume);
     }
   }
 }
@@ -275,7 +314,7 @@ export default {
     display: grid;
     grid-row: 2 / 6;
     grid-template-columns: repeat(5, 18vw);
-    grid-template-rows: repeat(3, 10vh);
+    grid-template-rows: repeat(4, 8vh);
     width: 90vw;
     align-self: center;
     justify-self: center;
@@ -288,8 +327,16 @@ export default {
   #volumeDown {
     grid-area: 2 / 1;
   }
+  #slider {
+    grid-area: 4 / 1 / 4 / 6;
+    width: 90%;
+    margin-left: 5%;
+  }
   #mute {
     grid-area: 3 / 1;
+  }
+  #mute.red {
+    background-color: #e91e63 !important;
   }
   #tv {
     grid-area: 1 / 2;

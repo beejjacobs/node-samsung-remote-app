@@ -102,7 +102,7 @@ export default {
         { icon: 'fast_forward', param: 'forward'},
         { icon: 'skip_next', param: 'skip-forward'}
       ],
-      volume: 50,
+      volume: 0,
       muted: false
     }
   },

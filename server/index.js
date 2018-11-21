@@ -22,13 +22,16 @@ soundBar.on('Muted', muted => {
 io.on('connection', function (socket) {
   console.log('client connected');
   soundBar.getMuted()
-      .then(muted => socket.emit('mute', muted));
+      .then(muted => socket.emit('mute', muted))
+      .catch(err => console.error('error getting mute state', err));
   soundBar.getVolume()
-      .then(volume => socket.emit('volume', volume));
+      .then(volume => socket.emit('volume', volume))
+      .catch(err => console.error('error getting volume state', err));
   socket.on('changeVolume', volume => {
     console.log('changeVolume', volume);
     if (volume >= 0 && volume <= 100) {
       soundBar.setVolume(volume)
+          .catch(err => console.error('error setting volume', err));
     }
   });
 });
@@ -64,41 +67,53 @@ app.get('/number/:number', function (req, res) {
 
 app.get('/volumeUp', function (req, res) {
   console.log('volumeUp');
+  let newVolume;
   soundBar.getVolume()
       .then(volume => {
-        let newVolume = volume + 4;
+        newVolume = volume + 4;
         if (newVolume > 100) {
           newVolume = 100;
         }
         return soundBar.setVolume(newVolume);
       })
       .then(() => {
+        io.emit('volume', newVolume);
         res.sendStatus(200);
-      });
+      })
+      .catch(err => console.error('error setting volume', err));
 });
 
 app.get('/volumeDown', function (req, res) {
   console.log('volumeDown');
+  let newVolume;
   soundBar.getVolume()
       .then(volume => {
-        let newVolume = volume - 4;
+        newVolume = volume - 4;
         if (newVolume < 0) {
           newVolume = 0;
         }
         return soundBar.setVolume(newVolume);
       })
       .then(() => {
+        io.emit('volume', newVolume);
         res.sendStatus(200);
-      });
+      })
+      .catch(err => console.error('error setting volume', err));
 });
 
 app.get('/mute', function (req, res) {
   console.log('mute');
+  let newState;
   soundBar.getMuted()
-      .then(muted => soundBar.setMuted(!muted))
+      .then(muted => {
+        newState = !muted;
+        return soundBar.setMuted(newState);
+      })
       .then(() => {
+        io.emit('mute', newState);
         res.sendStatus(200);
-      });
+      })
+      .catch(err => console.error('error setting mute', err));
 });
 
 app.get('/channelUp', function (req, res) {

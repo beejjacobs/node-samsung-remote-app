@@ -314,7 +314,7 @@ export default {
     display: grid;
     grid-row: 2 / 6;
     grid-template-columns: repeat(5, 18vw);
-    grid-template-rows: repeat(4, 8vh);
+    grid-template-rows: repeat(3, 10vh);
     width: 90vw;
     align-self: center;
     justify-self: center;
@@ -330,7 +330,7 @@ export default {
   #slider {
     grid-area: 4 / 1 / 4 / 6;
     width: 90%;
-    margin-left: 5%;
+    margin-top: 2vh;
   }
   #mute {
     grid-area: 3 / 1;

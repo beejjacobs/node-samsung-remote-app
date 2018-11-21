@@ -103,7 +103,8 @@ export default {
         { icon: 'skip_next', param: 'skip-forward'}
       ],
       volume: 0,
-      muted: false
+      muted: false,
+      ignoreInput: false
     }
   },
   computed: {
@@ -163,7 +164,12 @@ export default {
   },
   created() {
     socket.on('volume', volume => {
+      // do this because vue-slider will fire @input when :value changes
+      this.ignoreInput = true;
       this.volume = volume;
+      setTimeout(() => {
+        this.ignoreInput = false;
+      }, 100);
     });
     socket.on('mute', muted => {
       this.muted = muted;
@@ -179,6 +185,9 @@ export default {
       this.$http.get(url).then(console.log);
     },
     volumeChange(volume) {
+      if (this.ignoreInput) {
+        return;
+      }
       console.log(volume);
       socket.emit('changeVolume', volume);
     }

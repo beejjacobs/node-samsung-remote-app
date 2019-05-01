@@ -65,12 +65,14 @@ app.get('/number/:number', function (req, res) {
   res.sendStatus(200);
 });
 
+const INCREMENT = 2;
+
 app.get('/volumeUp', function (req, res) {
   console.log('volumeUp');
   let newVolume;
   soundBar.getVolume()
       .then(volume => {
-        newVolume = volume + 4;
+        newVolume = volume + INCREMENT;
         if (newVolume > 100) {
           newVolume = 100;
         }
@@ -88,7 +90,7 @@ app.get('/volumeDown', function (req, res) {
   let newVolume;
   soundBar.getVolume()
       .then(volume => {
-        newVolume = volume - 4;
+        newVolume = volume - INCREMENT;
         if (newVolume < 0) {
           newVolume = 0;
         }

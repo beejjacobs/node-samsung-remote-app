@@ -69,17 +69,9 @@ const INCREMENT = 2;
 
 app.get('/volumeUp', function (req, res) {
   console.log('volumeUp');
-  let newVolume;
-  soundBar.getVolume()
-      .then(volume => {
-        newVolume = volume + INCREMENT;
-        if (newVolume > 100) {
-          newVolume = 100;
-        }
-        return soundBar.setVolume(newVolume);
-      })
-      .then(() => {
-        io.emit('volume', newVolume);
+  soundBar.adjustVolume(INCREMENT)
+      .then(vol => {
+        io.emit('volume', vol);
         res.sendStatus(200);
       })
       .catch(err => console.error('error setting volume', err));
@@ -87,17 +79,9 @@ app.get('/volumeUp', function (req, res) {
 
 app.get('/volumeDown', function (req, res) {
   console.log('volumeDown');
-  let newVolume;
-  soundBar.getVolume()
-      .then(volume => {
-        newVolume = volume - INCREMENT;
-        if (newVolume < 0) {
-          newVolume = 0;
-        }
-        return soundBar.setVolume(newVolume);
-      })
-      .then(() => {
-        io.emit('volume', newVolume);
+  soundBar.adjustVolume(-INCREMENT)
+      .then(vol => {
+        io.emit('volume', vol);
         res.sendStatus(200);
       })
       .catch(err => console.error('error setting volume', err));

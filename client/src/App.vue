@@ -161,6 +161,26 @@ export default {
         }, 500);
       }
     });
+
+    document.addEventListener('keydown', event => {
+      if (event.isComposing || event.keyCode === 229) {
+        return;
+      }
+      switch (event.key) {
+        case 'ArrowLeft':
+        case 'ArrowRight':
+        case 'ArrowUp':
+        case 'ArrowDown':
+          this.press('arrow', event.key.replace('Arrow', '').toLowerCase());
+          break;
+        case 'Enter':
+          this.press('enter');
+          break;
+        case 's':
+          this.press('smartHub');
+          break;
+      }
+    });
   },
   created() {
     socket.on('volume', volume => {
